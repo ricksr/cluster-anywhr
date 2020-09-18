@@ -1,7 +1,7 @@
 import json
 from flask import Flask, request
 
-import helpers
+# import helpers
 from helpers.utils import utils
 from helpers.db import queries
 from helpers.algo import boundary
@@ -114,4 +114,4 @@ def add_hex():
     else:
         return {'response': 'err'}
 
-app.run()
+# app.run()

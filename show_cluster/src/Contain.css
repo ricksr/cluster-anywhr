@@ -1,0 +1,25 @@
+.containerAll {
+ /* width: 200px */
+}
+
+.barTop {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+
+}
+.inputBox {
+  padding: 5px;
+  margin-top: 5px;
+  width: 200px;
+  height: 30px;
+  left: 915px;
+  top: 364px;
+  
+  background:white;
+  border: none;
+  outline: none;
+  border-width: 0; 
+  box-shadow: none;
+  border-bottom: 1px solid #6c7277;
+}

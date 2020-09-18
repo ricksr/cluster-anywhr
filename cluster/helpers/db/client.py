@@ -14,10 +14,10 @@ def run_query(query, variables):
 
 
 def _make_post_call(body):
-    # url = os.environ['HASURA_GRAPHQL_ENDPOINT']
-    url = 'https://anywhr-cluster.herokuapp.com/v1/graphql'
-    # secret = os.environ['HASURA_ADMIN_SECRET']
-    secret = 'random'
+    url = os.environ['HASURA_GRAPHQL_ENDPOINT']
+    # url = 'https://anywhr-cluster.herokuapp.com/v1/graphql'
+    secret = os.environ['HASURA_ADMIN_SECRET']
+    # secret = 'random'
     headers = {
         'Content-type': 'application/json',
         'x-hasura-admin-secret': secret

@@ -144,7 +144,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/cluster/prod/1600421165462-2020-09-18T09:26:05.462Z/cluster.zip"
+          "S3Key": "serverless/cluster/prod/1600442202079-2020-09-18T15:16:42.079Z/cluster.zip"
         },
         "FunctionName": "cluster-prod-app",
         "Handler": "wsgi_handler.handler",
@@ -155,8 +155,8 @@
             "Arn"
           ]
         },
-        "Runtime": "python3.6",
-        "Timeout": 15,
+        "Runtime": "python3.7",
+        "Timeout": 600,
         "Environment": {
           "Variables": {
             "HASURA_GRAPHQL_ENDPOINT": "https://anywhr-cluster.herokuapp.com/v1/graphql",
@@ -169,14 +169,14 @@
         "IamRoleLambdaExecution"
       ]
     },
-    "AppLambdaVersionEkv4YbHfYy9UkjvQs855ZFjjmWqZFQKZQVpsgDpbKw": {
+    "AppLambdaVersionXyEqaar2ea6vkUYKrrYZ5yaW5NtVUbYUeIcpJ7RPGFY": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "AppLambdaFunction"
         },
-        "CodeSha256": "GfZvlOWRYPSnAr8UNzbpabOlGegPRQEt7sjsdKCAEMY="
+        "CodeSha256": "NPApjwfjY0NdpkpiMEv3L8BveoG17NGNTWlzqe0w2L8="
       }
     },
     "ApiGatewayRestApi": {
@@ -295,7 +295,7 @@
         "MethodResponses": []
       }
     },
-    "ApiGatewayDeployment1600421140221": {
+    "ApiGatewayDeployment1600442175768": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": {
@@ -355,7 +355,7 @@
     "AppLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "AppLambdaVersionEkv4YbHfYy9UkjvQs855ZFjjmWqZFQKZQVpsgDpbKw"
+        "Ref": "AppLambdaVersionXyEqaar2ea6vkUYKrrYZ5yaW5NtVUbYUeIcpJ7RPGFY"
       }
     },
     "ServiceEndpoint": {

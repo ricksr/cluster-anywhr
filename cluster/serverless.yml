@@ -16,7 +16,7 @@ custom:
 
 provider:
   name: aws
-  runtime: python3.6
+  runtime: python3.7
   stage: ${opt:stage, 'prod'}
 
   environment:
@@ -27,7 +27,7 @@ provider:
 functions:
   app:
     handler: wsgi_handler.handler
-    timeout: 15
+    timeout: 600
     events:
       - http: ANY /
       - http: "ANY {proxy+}"
