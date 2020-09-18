@@ -10,11 +10,9 @@ def find_new_hex_loc(boundary_of_origin_hex, origin_hex_name):
     coords = origin_hex_location['hexagons'][0].get('location', '')
     if(coords) :
         loc = [
-            coords['x1'],
-            coords['x2'],
-            coords['y1'],
-            coords['y2'],
-            coords['y3']
+            coords['q'],
+            coords['r'],
+            coords['s']
         ]
         # return loc
         
@@ -54,4 +52,4 @@ def find_new_hex_loc(boundary_of_origin_hex, origin_hex_name):
         return None
     
 
-# find_new_hex_loc([1,1,1,1,1,1], 'a')
+# find_new_hex_loc([0,0,0], 'a')

@@ -1,52 +1,4 @@
-from  .client import run_query
-
-
-def insert_member(id, real_name, tz):
-    query = '''
-        mutation insert_members($id: String, $real_name: String, $tz: String) {
-            insert_members(objects: {id: $id, real_name: $real_name, tz: $tz}) {
-                returning {
-                    id
-                }
-            }
-        }
-    '''
-    variables = {
-        'id': id,
-        'real_name': real_name,
-        'tz': tz
-    }
-    response = run_query(query, variables)
-    inserted_details = response.get(
-        'insert_members', {}).get('returning', [])
-    if len(inserted_details) != 1:
-        raise RuntimeError('query failed')
-    return inserted_details[0]
-
-
-def insert_member_activity(member_id, start_time, end_time):
-    query = '''
-        mutation insert_members_activity_periods($member_id: String, $start_time: String, $end_time: String) {
-            insert_members_activity_periods(objects: {member_id: $member_id, start_time: $start_time, end_time: $end_time}) {
-                returning {
-                    id
-                }
-            }
-        }
-    '''
-    variables = {
-        'member_id': member_id,
-        'start_time': start_time,
-        'end_time': end_time
-    }
-    response = run_query(query, variables)
-    inserted_details = response.get(
-        'insert_members_activity_periods', {}).get('returning', [])
-    if len(inserted_details) != 1:
-        raise RuntimeError('query failed')
-    return inserted_details[0]
-
-# ###########################
+from .client import run_query
 
 
 def get_hex_details_by_name(name):
@@ -75,6 +27,7 @@ def get_hex_details_by_name(name):
     print(response)
     return response
 
+
 def get_hex_details_by_id(id):
     query = '''
         query find_hex($id: uuid!) {
@@ -101,6 +54,7 @@ def get_hex_details_by_id(id):
     print(response)
     return response
 
+
 def get_hex_location_by_name(name):
     query = ''' 
         query hex_location($name: String!) {
@@ -110,7 +64,7 @@ def get_hex_location_by_name(name):
                 }
             ) {
                 location {
-                    hexagon_id x1 x2 y1 y2 y3
+                    hexagon_id q r s
                 }
             }
         }
@@ -121,3 +75,122 @@ def get_hex_location_by_name(name):
     response = run_query(query, variables)
     print(response)
     return response
+
+
+def get_hex_id_by_location(q, r, s):
+    query = ''' 
+        query get_hex_byLoc($q: Int!, $r: Int!, $s: Int!) {
+            locations(
+                where: {
+                    q: {_eq: $q}, 
+                    r: {_eq: $r}, 
+                    s: {_eq: $s}
+                }) { 
+                hexagon_id 
+            }
+        }
+    '''
+    variables = {
+        "q": q,
+        "r": r,
+        "s": s
+    }
+    response = run_query(query, variables)
+    print(response)
+    return response.get("locations", "")
+
+
+def insert_new_hex(name):
+    query = '''
+        mutation insert_hex($name: String!) {
+            insert_clusters(
+                objects: {
+                    hex_id: {
+                        data: {name: $name}, 
+                        on_conflict: {constraint: hexagons_name_key, update_columns: updated_at}
+                    }
+                }, 
+                on_conflict: {
+                    constraint: clusters_hexagon_id_key, 
+                    update_columns: updated_at
+                }
+            ) {
+                affected_rows
+                id: returning {
+                    hexagon_id
+                }
+            }
+        }
+    '''
+
+    variables = {
+        "name": name
+    }
+    response = run_query(query, variables)
+    print(response)
+    return response.get("insert_clusters", "").get("id", "")
+
+
+def insert_hex_neighbours(variables: dict, column_updates):
+    query = '''
+        mutation insert_clusters($data: [clusters_insert_input!]!) {
+            insert_clusters(
+                objects: $data , 
+                on_conflict: {
+                    constraint: clusters_hexagon_id_key, 
+                    update_columns: $column_updates
+                }
+            ) {
+                affected_rows
+                returning {
+                    hexagon_id
+                    n1 n2 n3 n4 n5 n6
+                }
+            }
+        }
+    '''
+    response = run_query(query, variables)
+    print(response)
+    return response.get("insert_clusters", "").get("returning", "")
+
+
+def insert_new_hex_loc(hexagon_id, q, r, s):
+    query = '''
+            mutation insert_locations(
+                $hexagon_id: uuid!,
+                $q: Int!,
+                $r: Int!,
+                $s: Int!
+            ) 
+            {
+                insert_locations(
+                    objects: {
+                        hexagon_id: $hexagon_id, 
+                        q: $q, 
+                        r: $r, 
+                        s: $s
+                    }, 
+                    on_conflict: {
+                        constraint: location_hexagon_id_key, 
+                        update_columns: [q, r, s, updated_at]
+                    }
+                ) {
+                    affected_rows
+                    returning {
+                        hexagon_id
+                        q
+                        r
+                        s
+                    }
+                }
+            }
+        '''
+    variables = {
+        "hexagon_id": hexagon_id,
+        "q": q,
+        "r": r,
+        "s": s
+    }
+    response = run_query(query, variables)
+    print(response)
+    return response.get("insert_locations", "").get("returning", "")

@@ -1,8 +1,9 @@
 import json
 from flask import Flask, request
+
 from helpers.db import queries
-import utils
 from helpers.algo.boundary import*
+from helpers.algo.neighbours import*
 from helpers.algo.new_hex_loc import*
 
 
@@ -45,43 +46,46 @@ def search_hex_byId():
 
 
 @app.route('/add-hex', methods=['GET','POST'])
-def insertMember():
+def add_hex():
 	try:
 		origin_hex = request.args['src']  
 		new_hex = request.args['new'] 
-		boundary_of_origin_hex = utils.user_boundary_choice[request.args['loc']]
+		boundary_of_origin_hex = request.args['loc']
 
 		if(origin_hex and new_hex and boundary_of_origin_hex):
 			origin_coordinates_hex = queries.get_hex_location_by_name(origin_hex)  
 			# todo
 			# Find location of the new hex
 			# find neighbours around it , if present query their cluster table rows
+			
 			new_hex_loc = find_new_hex_loc(boundary_of_origin_hex, origin_hex)
+			new_hex_neighbours = find_new_hex_neighbours(new_hex_loc, boundary_of_origin_hex)
 
-			resp = queries.insert_member(id, real_name, tz)
-			return {"statusCode": 200, 'response': resp}
+			# insertions new hex // fetch id
+			
+			insert_new_hex_resp = queries.insert_new_hex(new_hex)
+			new_hexagon_id = insert_new_hex_resp.get("hexagon_id", "")
+
+			# insert neighbours of new node
+
+			new_hex_neighbours["hexagon_id"] = new_hexagon_id
+			column_updates = ['n1','n2','n3','n4','n5','n6', 'updated_at']
+			insert_new_hex_neighbours = queries.insert_hex_neighbours(new_hex_neighbours, column_updates)
+
+			# insert location of new node
+
+			insert_new_hex_loc = queries.insert_new_hex_loc(new_hexagon_id, new_hex_loc[0], new_hex_loc[1], new_hex_loc[2])
+			
+			# insert neighbours of origin node
+
+			origin_req = {}
+			origin_req[utils.user_boundary_choice[boundary_of_origin_hex]] = new_hexagon_id
+			column_updates = [utils.user_boundary_choice[boundary_of_origin_hex], 'updated_at']
+			update_origin_hex_neighbour = queries.insert_hex_neighbours(origin_req, column_updates)
+
+			return {"statusCode": 200, 'response': update_origin_hex_neighbour}
 		else:
-			return {'response': 'please insert unique id, real_name , tz'}
+			return {'response': 'err'}
 	except:
 		return {'Network Error'}
 	
-    
-
-@app.route('/add-member-activity', methods=['GET','POST'])
-def insertMemberACtivity():
-	try:
-		id = request.args['id'] 
-		start_time = request.args['start_time'] 
-		end_time = request.args['end_time']
-		if(id and start_time and end_time):
-			resp = queries.insert_member_activity(id, start_time, end_time)
-			return {"statusCode": 200, 'response': resp}
-		else:
-			return {'response': 'please all datas , i.e., id, start_time, end_time'}
-	except:
-		return {'Network error'}
-
-
-@app.route('/dummy', methods=['GET'])
-def getDummyData():
-    return dummy
