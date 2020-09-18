@@ -16,7 +16,7 @@ custom:
 
 provider:
   name: aws
-  runtime: python3.7
+  runtime: python3.6
   stage: ${opt:stage, 'prod'}
 
   environment:

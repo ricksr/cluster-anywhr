@@ -8,7 +8,7 @@
       "stage": "prod",
       "variableSyntax": "\\${([ ~:a-zA-Z0-9._@'\",\\-\\/\\(\\)*?]+?)}",
       "name": "aws",
-      "runtime": "python3.7",
+      "runtime": "python3.6",
       "environment": {
         "HASURA_GRAPHQL_ENDPOINT": "https://anywhr-cluster.herokuapp.com/v1/graphql",
         "HASURA_ADMIN_SECRET": "random"
@@ -162,7 +162,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/cluster/prod/1600442202079-2020-09-18T15:16:42.079Z/cluster.zip"
+                "S3Key": "serverless/cluster/prod/1600452101350-2020-09-18T18:01:41.350Z/cluster.zip"
               },
               "FunctionName": "cluster-prod-app",
               "Handler": "wsgi_handler.handler",
@@ -173,7 +173,7 @@
                   "Arn"
                 ]
               },
-              "Runtime": "python3.7",
+              "Runtime": "python3.6",
               "Timeout": 600,
               "Environment": {
                 "Variables": {
@@ -187,14 +187,14 @@
               "IamRoleLambdaExecution"
             ]
           },
-          "AppLambdaVersionXyEqaar2ea6vkUYKrrYZ5yaW5NtVUbYUeIcpJ7RPGFY": {
+          "AppLambdaVersionrkBggjXO7jDuG5sev2Qy0qtev05Qu3viMe4CBB08k": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "AppLambdaFunction"
               },
-              "CodeSha256": "NPApjwfjY0NdpkpiMEv3L8BveoG17NGNTWlzqe0w2L8="
+              "CodeSha256": "Qlta+yIe6i9/TKbVsonKCyrA/d3XkHuDDdBi8JCPe3w="
             }
           },
           "ApiGatewayRestApi": {
@@ -313,7 +313,7 @@
               "MethodResponses": []
             }
           },
-          "ApiGatewayDeployment1600442175768": {
+          "ApiGatewayDeployment1600452032343": {
             "Type": "AWS::ApiGateway::Deployment",
             "Properties": {
               "RestApiId": {
@@ -373,7 +373,7 @@
           "AppLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "AppLambdaVersionXyEqaar2ea6vkUYKrrYZ5yaW5NtVUbYUeIcpJ7RPGFY"
+              "Ref": "AppLambdaVersionrkBggjXO7jDuG5sev2Qy0qtev05Qu3viMe4CBB08k"
             }
           },
           "ServiceEndpoint": {
@@ -505,9 +505,9 @@
         "name": "cluster-prod-app",
         "package": {},
         "memory": 1024,
-        "runtime": "python3.7",
+        "runtime": "python3.6",
         "vpc": {},
-        "versionLogicalId": "AppLambdaVersionXyEqaar2ea6vkUYKrrYZ5yaW5NtVUbYUeIcpJ7RPGFY"
+        "versionLogicalId": "AppLambdaVersionrkBggjXO7jDuG5sev2Qy0qtev05Qu3viMe4CBB08k"
       }
     },
     "serviceFilename": "serverless.yml",
@@ -516,7 +516,7 @@
     "artifact": "/home/sutirth/projects/personal/cluster-anywhr/cluster/.serverless/cluster.zip"
   },
   "package": {
-    "artifactDirectoryName": "serverless/cluster/prod/1600442202079-2020-09-18T15:16:42.079Z",
+    "artifactDirectoryName": "serverless/cluster/prod/1600452101350-2020-09-18T18:01:41.350Z",
     "artifact": "cluster.zip"
   }
 }

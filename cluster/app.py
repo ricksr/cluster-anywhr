@@ -1,6 +1,8 @@
 import json
 from flask import Flask, request
+from flask_cors import CORS
 
+# from flask_cors import CORS, cross_origin
 # import helpers
 from helpers.utils import utils
 from helpers.db import queries
@@ -8,15 +10,15 @@ from helpers.algo import boundary
 from helpers.algo import neighbours
 from helpers.algo.new_hex_loc import*
 
-
 app = Flask(__name__)
-
+CORS(app)
 
 def logger(val):
     print("\n{}\n".format(val))
 
 
 @app.route('/get-hex-by-name', methods=['GET', 'POST'])
+# @cross_origin()
 def search_hex_byName():
     name = request.args['name']
     logger(name)
@@ -34,6 +36,7 @@ def search_hex_byName():
 
 
 @app.route('/get-hex-by-id', methods=['GET', 'POST'])
+# @cross_origin()
 def search_hex_byId():
     id = request.args['id']
     logger(id)
@@ -50,6 +53,7 @@ def search_hex_byId():
     return {'Network Error'}
 
 @app.route('/get-all-coordinates', methods=['GET', 'POST'])
+# @cross_origin()
 def get_all_coords():
 	try:
 		coords = queries.get_all_locations()
@@ -60,6 +64,7 @@ def get_all_coords():
 
 
 @app.route('/add-hex', methods=['GET', 'POST'])
+# @cross_origin()
 def add_hex():
 
     origin_hex = request.args['src']
