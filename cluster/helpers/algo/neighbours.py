@@ -27,6 +27,12 @@ def find_new_hex_neighbours(loc, boundary_of_origin_hex):
         resp["n5"] = list(map(lambda data: data.get('hexagon_id'), queries.get_hex_id_by_location(n5[0], n5[1], n5[2])))
         resp["n6"] = list(map(lambda data: data.get('hexagon_id'), queries.get_hex_id_by_location(n6[0], n6[1], n6[2])))
        
+        resp["n1"] = "NO" if len(resp["n1"])==0 else resp["n1"][0]
+        resp["n2"] = "NO" if len(resp["n2"])==0 else resp["n2"][0]
+        resp["n3"] = "NO" if len(resp["n3"])==0 else resp["n3"][0]
+        resp["n4"] = "NO" if len(resp["n4"])==0 else resp["n4"][0]
+        resp["n5"] = "NO" if len(resp["n5"])==0 else resp["n5"][0]
+        resp["n6"] = "NO" if len(resp["n6"])==0 else resp["n6"][0]
         # resp.pop(utils.user_boundary_choice[boundary_of_origin_hex])
         print(resp)
     return resp

@@ -13,6 +13,7 @@ from helpers.algo.new_hex_loc import*
 app = Flask(__name__)
 CORS(app)
 
+
 def logger(val):
     print("\n{}\n".format(val))
 
@@ -52,15 +53,16 @@ def search_hex_byId():
         return {"Please enter the id correctly to get all the details"}
     return {'Network Error'}
 
+
 @app.route('/get-all-coordinates', methods=['GET', 'POST'])
 # @cross_origin()
 def get_all_coords():
-	try:
-		coords = queries.get_all_locations()
-		logger(coords)
-		return {'body': coords}
-	except:
-		return {'Network Error'} 
+    try:
+        coords = queries.get_all_locations()
+        logger(coords)
+        return {'body': coords}
+    except:
+        return {'Network Error'}
 
 
 @app.route('/add-hex', methods=['GET', 'POST'])
@@ -74,8 +76,10 @@ def add_hex():
 
     if(origin_hex and new_hex and boundary_of_origin_hex):
         origin_coordinates_hex = queries.get_hex_location_by_name(origin_hex)
-        logger('-----here-----')
+        logger('-----here-----get_hex_location_by_name-origin---')
         logger(origin_coordinates_hex)
+        origin_id = origin_coordinates_hex.get("hexagons")[0].get(
+            'location', '').get('hexagon_id', '')
         # todo
         # Find location of the new hex
         # find neighbours around it , if present query their cluster table rows
@@ -83,22 +87,25 @@ def add_hex():
         new_hex_loc = boundary.find_new_hex_loc(
             boundary_of_origin_hex, origin_hex, origin_coordinates_hex)
 
-        logger(f'- ----here---{boundary.find_new_hex_loc(boundary_of_origin_hex, origin_hex, origin_coordinates_hex)}--')
+        logger('-----here-----new-hex-loc-using-origin-loc-and-border---')
         logger(new_hex_loc)
         new_hex_neighbours = neighbours.find_new_hex_neighbours(
             new_hex_loc, boundary_of_origin_hex)
 
         # insertions new hex // fetch id
-
+        logger('-----here-----inserting-new-node---')
         insert_new_hex_resp = queries.insert_new_hex(new_hex)
-        new_hexagon_id = insert_new_hex_resp.get("hexagon_id", "")
+        new_hexagon_id = list(map(lambda data: data.get(
+            'hexagon_id'),  insert_new_hex_resp))[0]
+        logger(new_hexagon_id)
 
         # insert neighbours of new node
-
+        logger('-----here-----inserting-new-node-neighbours---')
         new_hex_neighbours["hexagon_id"] = new_hexagon_id
+        logger(new_hex_neighbours)
         column_updates = ['n1', 'n2', 'n3', 'n4', 'n5', 'n6', 'updated_at']
         insert_new_hex_neighbours = queries.insert_hex_neighbours(
-            new_hex_neighbours, column_updates)
+            {"data": new_hex_neighbours, "colm": column_updates})
 
         # insert location of new node
 
@@ -110,10 +117,14 @@ def add_hex():
         origin_req = {}
         origin_req[utils.user_boundary_choice[boundary_of_origin_hex]
                    ] = new_hexagon_id
+        origin_req["hexagon_id"] = origin_id
         column_updates = [
             utils.user_boundary_choice[boundary_of_origin_hex], 'updated_at']
-        update_origin_hex_neighbour = queries.insert_hex_neighbours(
-            origin_req, column_updates)
+
+        logger({"data": origin_req, "colm": column_updates})
+
+        update_origin_hex_neighbour=queries.insert_hex_neighbours(
+            {"data": origin_req, "colm": column_updates})
 
         return {"statusCode": 200, 'response': update_origin_hex_neighbour}
     else:

@@ -153,14 +153,15 @@ def insert_new_hex(name):
     return response.get("insert_clusters", "").get("id", "")
 
 
-def insert_hex_neighbours(variables: dict, column_updates):
+def insert_hex_neighbours(variables: dict):
+    print(variables)
     query = '''
-        mutation insert_clusters($data: [clusters_insert_input!]!) {
+        mutation insert_clusters($data: [clusters_insert_input!]!, $colm: [clusters_update_column!]!) {
             insert_clusters(
                 objects: $data , 
                 on_conflict: {
                     constraint: clusters_hexagon_id_key, 
-                    update_columns: $column_updates
+                    update_columns: $colm
                 }
             ) {
                 affected_rows
