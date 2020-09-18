@@ -23,8 +23,8 @@ def _make_post_call(body):
         'x-hasura-admin-secret': secret
     }
     print("HASURA_CLIENT_POST_CALL")
-    print("URL : " + url)
-    print("BODY : " + str(body))
+    # print("URL : " + url)
+    # print("BODY : " + str(body))
     response = requests.post(url, json=body, headers=headers, timeout=10)
     print("RESPONSE : " + str(response.json()))
     return response.json()
