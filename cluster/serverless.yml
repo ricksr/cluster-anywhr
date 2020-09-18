@@ -1,6 +1,7 @@
 service: cluster
 
 plugins:
+  - serverless-offline
   - serverless-wsgi
   - serverless-python-requirements
 custom:
