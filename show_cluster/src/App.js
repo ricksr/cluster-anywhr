@@ -15,6 +15,7 @@ const App = () => {
   const [hexName, setHexName] = useState();
   const [newHex, setNewHex] = useState();
   const [dogs, setDogs] = useState([]);
+  const [vals, setVals] = useState({});
 
   const handleHexName = (e) => {setHexName(e.target.value);}
   const handleNewHex = (e) => {setNewHex(e.target.value);}
@@ -35,7 +36,11 @@ const App = () => {
   const handleSearchSubmit = (e) => {
     console.log(hexName);
     console.log(dogs);
-    dogs.body.map(i => console.log(i.q, i.r, i.s))
+
+    axios.get(`${url}get-hex-by-name?name=${hexName}`).then((response) => {
+      setVals(response);
+      alert(vals);
+    });
   }
 
   const handleAddSubmit = (e) => {
@@ -84,7 +89,7 @@ const App = () => {
       </div>
 
       <div className="Hex">
-        <HexGrid width={1500} height={1000}>
+        <HexGrid width={1000} height={400} viewBox="-70 -70 150 100">
           <Layout size={{ x: 4, y: 4 }}>
             { 
             !isEmpty(dogs) && dogs.body.map(i => (
