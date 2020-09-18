@@ -49,6 +49,15 @@ def search_hex_byId():
         return {"Please enter the id correctly to get all the details"}
     return {'Network Error'}
 
+@app.route('/get-all-coordinates', methods=['GET', 'POST'])
+def get_all_coords():
+	try:
+		coords = queries.get_all_locations()
+		logger(coords)
+		return {'body': coords}
+	except:
+		return {'Network Error'} 
+
 
 @app.route('/add-hex', methods=['GET', 'POST'])
 def add_hex():

@@ -99,6 +99,28 @@ def get_hex_id_by_location(q, r, s):
     print(response)
     return response.get("locations", "")
 
+def get_all_locations():
+    query = ''' 
+        query all_locations {
+            locations(
+                where: {
+                    hex_name: {
+                        is_active: {_eq: "TRUE"}
+                    }
+                }
+            ) {
+                q r s
+                hex_name {
+                  name
+                }
+            }
+        }
+    '''
+    variables = { }
+    response = run_query(query, variables)
+    print(response)
+    return response.get("locations", "")
+
 
 def insert_new_hex(name):
     query = '''
