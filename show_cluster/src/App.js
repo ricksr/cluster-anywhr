@@ -1,7 +1,7 @@
 import React, {useEffect, useState, useCallback} from 'react';
 import { HexGrid, Layout, Hexagon, GridGenerator, Text } from 'react-hexgrid';
 import {Input, Button, InputGroup} from 'reactstrap';
-
+import { isEmpty, constant } from 'lodash-es';
 
 import anywhr from './anywhr.png';
 import styles from './Contain.css';
@@ -84,23 +84,15 @@ const App = () => {
       </div>
 
       <div className="Hex">
-      
-              <div>{ dogs.body.map(i => (
-                
-                 <h1>{i.q}</h1>
-               ))
-            }</div>
-        <HexGrid width={1200} height={1000}>
-          <Layout size={{ x: 100, y: 100 }}>
-            
-            <Hexagon q={0} r={-1} s={1} fill="pat-2" />
-            <Hexagon q={0} r={1} s={-1} />
-            <Hexagon q={1} r={-1} s={0}>
-              <Text>1, -1, 0</Text>
-            </Hexagon>
-            <Hexagon q={1} r={0} s={-1}>
-              <Text>1, 0, -1</Text>
-            </Hexagon>
+        <HexGrid width={1500} height={1000}>
+          <Layout size={{ x: 4, y: 4 }}>
+            { 
+            !isEmpty(dogs) && dogs.body.map(i => (
+              <Hexagon q={i.q} r={i.r} s={i.s} >
+                <Text>{i.hex_name.name}</Text>
+              </Hexagon>
+            ))
+          }
           </Layout>
         </HexGrid>
       </div>
