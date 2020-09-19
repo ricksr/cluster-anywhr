@@ -1,7 +1,7 @@
-import React, {useEffect, useState, useCallback} from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { HexGrid, Layout, Hexagon, Text } from 'react-hexgrid';
-import {Input, Button, InputGroup} from 'reactstrap';
-import { isEmpty } from 'lodash-es';
+import { Input, Button, InputGroup } from 'reactstrap';
+import { isEmpty, size } from 'lodash-es';
 
 import anywhr from './anywhr.png';
 import styles from './Contain.css';
@@ -21,11 +21,11 @@ const App = () => {
   const [search, setSearch] = useState(false);
   const [removeHexName, setRemoveHexName] = useState();
 
-  const handleHexName = (e) => {setHexName(e.target.value);}
-  const handleNewHex = (e) => {setNewHex(e.target.value);}
-  const handleSrcHex = (e) => {setSrcHex(e.target.value);}
-  const handleSide = (e) => {setSide(e.target.value);}
-  const handleRemoveHex = (e) => {setRemoveHexName(e.target.value);}
+  const handleHexName = (e) => { setHexName(e.target.value); }
+  const handleNewHex = (e) => { setNewHex(e.target.value); }
+  const handleSrcHex = (e) => { setSrcHex(e.target.value); }
+  const handleSide = (e) => { setSide(e.target.value); }
+  const handleRemoveHex = (e) => { setRemoveHexName(e.target.value); }
 
   const loadHexagons = useCallback(() => {
     axios.get(`${url}get-all-coordinates`).then((response) => {
@@ -49,7 +49,7 @@ const App = () => {
         setVals(vals);
 
       })
-      alert('Please see here - '+`${url}get-hex-by-name?name=${hexName}`);
+      alert('Please see here - ' + `${url}get-hex-by-name?name=${hexName}`);
       // console.log(vals)
     });
   }
@@ -59,10 +59,10 @@ const App = () => {
       loadHexagons();
     });
   }
-  
+
   const handleRemoveSubmit = async (e) => {
     await axios.post(`${url}remove-hex?src=${removeHexName}`).then((response) => {
-      if(response.data.err) {
+      if (response.data.err) {
         alert('Not possible to remove')
       }
       else {
@@ -71,70 +71,70 @@ const App = () => {
       loadHexagons();
     });
   }
-  
+
 
   return (
     <div className={styles.containerAll}>
       <div className={styles.barTop}>
         <img src={anywhr} alt="anywhr" />
       </div>
-      <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-around" }}>
+      <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-around" }} >
         <div>
-        <InputGroup size="sm">
-          <Input
-            addon
-            type="text"
-            placeholder="Search By Name"
-            name="Search Hex"
-            value={hexName}
-            onChange={handleHexName}
-          />
+          <InputGroup size="sm">
+            <Input
+              addon
+              type="text"
+              placeholder="Search By Name"
+              name="Search Hex"
+              value={hexName}
+              onChange={handleHexName}
+            />
           </InputGroup>
           <br />
           <InputGroup><Button color="primary" onClick={handleSearchSubmit}>Find whr?</Button></InputGroup>
-          
-          </div>
-          <br />
-          <div>
+
+        </div>
+        <br />
+        <div>
           <InputGroup>
-          <Input
-            className={styles.inputBox}
-            type="text"
-            placeholder="Add a Hex"
-            name="New Hex Name"
-            value={newHex}
-            onChange={handleNewHex}
-          />
-          <Input
-            className={styles.inputBox}
-            type="text"
-            placeholder="New Hex Source"
-            name="Name src"
-            value={srcHex}
-            onChange={handleSrcHex}
-          />
-          <Input
-            className={styles.inputBox}
-            type="text"
-            placeholder="which side of Source - 0--5"
-            name="Search Hex"
-            value={side}
-            onChange={handleSide}
-          />
+            <Input
+              className={styles.inputBox}
+              type="text"
+              placeholder="Add a Hex"
+              name="New Hex Name"
+              value={newHex}
+              onChange={handleNewHex}
+            />
+            <Input
+              className={styles.inputBox}
+              type="text"
+              placeholder="New Hex Source"
+              name="Name src"
+              value={srcHex}
+              onChange={handleSrcHex}
+            />
+            <Input
+              className={styles.inputBox}
+              type="text"
+              placeholder="which side of Source - 0--5"
+              name="Search Hex"
+              value={side}
+              onChange={handleSide}
+            />
           </InputGroup>
           <br />
           <InputGroup><Button color="primary" onClick={handleAddSubmit}>Add Hexagon - Hotspot</Button></InputGroup>
         </div>
         <div>
-        <InputGroup>
-          <Input
-            className={styles.inputBox}
-            type="text"
-            placeholder="Hex Name to Remove"
-            name="New Hex Name"
-            value={removeHexName}
-            onChange={handleRemoveHex}
-          />
+          <InputGroup>
+            <Input
+              className={styles.inputBox}
+              type="text"
+              placeholder="Hex Name to Remove"
+              name="New Hex Name"
+              value={removeHexName}
+              onChange={handleRemoveHex}
+            />
           </InputGroup>
           <br />
           <InputGroup><Button color="primary" onClick={handleRemoveSubmit}>Remove Hexagon - Hotspot</Button></InputGroup>
@@ -144,17 +144,17 @@ const App = () => {
       <div className="Hex">
         <HexGrid width={1000} height={400} viewBox="-70 -70 150 100">
           <Layout size={{ x: 4, y: 4 }}>
-            { 
-            !isEmpty(Hexagons) && Hexagons.body.map(i => (
-              <Hexagon q={i.q} r={i.r} s={i.s} >
-                <Text>{i.hex_name.name}</Text>
-              </Hexagon>
-            ))
-          }
+            {
+              !isEmpty(Hexagons) && Hexagons.body.map(i => (
+                <Hexagon q={i.q} r={i.r} s={i.s} >
+                  <Text>{i.hex_name.name}</Text>
+                </Hexagon>
+              ))
+            }
           </Layout>
         </HexGrid>
       </div>
-     
+
     </div>
   );
 }
