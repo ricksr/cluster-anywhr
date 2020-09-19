@@ -49,7 +49,7 @@ def search_hex_byId():
             return resp
     else:
         return {"Please enter the id correctly to get all the details"}
-    return {'Network Error'}
+    return {"err":'Network Error'}
 
 
 @app.route('/get-all-coordinates', methods=['GET', 'POST'])
@@ -60,7 +60,7 @@ def get_all_coords():
         logger(coords)
         return {'body': coords}
     except:
-        return {'Network Error'}
+        return {"err":'Network Error'}
 
 
 @app.route('/add-hex', methods=['GET', 'POST'])
@@ -78,7 +78,7 @@ def add_hex():
         logger(origin_coordinates_hex)
         origin_id = origin_coordinates_hex.get("hexagons")[0].get(
             'location', '').get('hexagon_id', '')
-       
+
         # Find location of the new hex
         # find neighbours around it , if present query their cluster table rows
 
@@ -121,10 +121,48 @@ def add_hex():
 
         logger({"data": origin_req, "colm": column_updates})
 
-        update_origin_hex_neighbour=queries.insert_hex_neighbours(
+        update_origin_hex_neighbour = queries.insert_hex_neighbours(
             {"data": origin_req, "colm": column_updates})
 
         return {"statusCode": 200, 'response': update_origin_hex_neighbour}
     else:
         return {'response': 'err'}
 
+
+@app.route('/remove-hex', methods=['GET', 'POST'])
+# @cross_origin()
+def delete_hex():
+    origin_hex = request.args['src']
+
+    if origin_hex:
+        try:
+            neighbours_of_origin = queries.find_neighbours_by_name(origin_hex)
+        except:
+            return {"err":"error"}
+        degrees = 6
+        neighbours_of_origin = neighbours_of_origin[0]
+
+        if neighbours_of_origin.get("hex","").get("n1","") == "NO":
+            degrees = degrees - 1
+        if neighbours_of_origin.get("hex","").get("n2","") == "NO":
+            degrees = degrees - 1
+        if neighbours_of_origin.get("hex","").get("n3","") == "NO":
+            degrees = degrees - 1
+        if neighbours_of_origin.get("hex","").get("n4","") == "NO":
+            degrees = degrees - 1
+        if neighbours_of_origin.get("hex","").get("n5","") == "NO":
+            degrees = degrees - 1
+        if neighbours_of_origin.get("hex","").get("n6","") == "NO":
+            degrees = degrees - 1
+        
+        
+        if degrees > 2:
+            try:
+                deletion_resp = queries.delete_hex(origin_hex)
+                return {"body": deletion_resp}
+            except:
+                return {"err":"error"}
+        else:
+            return {"err":"Not possible to remove"}
+    else:
+        return {"err":"provide valid name"}

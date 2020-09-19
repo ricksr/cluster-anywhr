@@ -23,4 +23,5 @@ Three table :
 
 comfortable :
 
-Tech stacks : python , flask, JS , reactjs 
+Tech stacks : python , flask, JS , reactjs , aws lambda , serverless , graphql
+

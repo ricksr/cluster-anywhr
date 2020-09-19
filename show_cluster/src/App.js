@@ -10,38 +10,40 @@ const axios = require('axios');
 
 
 const url = "https://24tflrq9y9.execute-api.us-east-1.amazonaws.com/prod/";
+
 const App = () => {
   const [hexName, setHexName] = useState();
   const [newHex, setNewHex] = useState();
   const [srcHex, setSrcHex] = useState();
   const [side, setSide] = useState();
-  const [dogs, setDogs] = useState([]);
+  const [Hexagons, setHexagons] = useState([]);
   const [vals, setVals] = useState([]);
   const [search, setSearch] = useState(false);
+  const [removeHexName, setRemoveHexName] = useState();
 
   const handleHexName = (e) => {setHexName(e.target.value);}
   const handleNewHex = (e) => {setNewHex(e.target.value);}
   const handleSrcHex = (e) => {setSrcHex(e.target.value);}
   const handleSide = (e) => {setSide(e.target.value);}
+  const handleRemoveHex = (e) => {setRemoveHexName(e.target.value);}
 
-  const loadDogs = useCallback(() => {
+  const loadHexagons = useCallback(() => {
     axios.get(`${url}get-all-coordinates`).then((response) => {
       // console.log(response);
-      setDogs(response.data);
+      setHexagons(response.data);
     });
   }, []);
 
   useEffect(() => {
-   
-    loadDogs();
-  }, [loadDogs]);
+    loadHexagons();
+  }, [loadHexagons]);
 
 
-  const handleSearchSubmit = () => {
-    axios.get(`${url}get-hex-by-name?name=${hexName}`).then((response) => {
+  const handleSearchSubmit = async () => {
+    await axios.get(`${url}get-hex-by-name?name=${hexName}`).then((response) => {
       setVals(response);
       setSearch(true);
-      console.log(response)
+      // console.log(response)
       !isEmpty(response.data) && response.data.hexagons.map(i => {
         vals.push(i);
         setVals(vals);
@@ -52,12 +54,23 @@ const App = () => {
     });
   }
 
-  const handleAddSubmit = (e) => {
-    axios.post(`${url}add-hex?src=${srcHex}&new=${newHex}&loc=${side}`).then((response) => {
-      loadDogs();
+  const handleAddSubmit = async (e) => {
+    await axios.post(`${url}add-hex?src=${srcHex}&new=${newHex}&loc=${side}`).then((response) => {
+      loadHexagons();
     });
   }
   
+  const handleRemoveSubmit = async (e) => {
+    await axios.post(`${url}remove-hex?src=${removeHexName}`).then((response) => {
+      if(response.data.err) {
+        alert('Not possible to remove')
+      }
+      else {
+        alert('success')
+      }
+      loadHexagons();
+    });
+  }
   
 
   return (
@@ -112,13 +125,27 @@ const App = () => {
           <br />
           <InputGroup><Button color="primary" onClick={handleAddSubmit}>Add Hexagon - Hotspot</Button></InputGroup>
         </div>
+        <div>
+        <InputGroup>
+          <Input
+            className={styles.inputBox}
+            type="text"
+            placeholder="Hex Name to Remove"
+            name="New Hex Name"
+            value={removeHexName}
+            onChange={handleRemoveHex}
+          />
+          </InputGroup>
+          <br />
+          <InputGroup><Button color="primary" onClick={handleRemoveSubmit}>Remove Hexagon - Hotspot</Button></InputGroup>
+        </div>
       </div>
 
       <div className="Hex">
         <HexGrid width={1000} height={400} viewBox="-70 -70 150 100">
           <Layout size={{ x: 4, y: 4 }}>
             { 
-            !isEmpty(dogs) && dogs.body.map(i => (
+            !isEmpty(Hexagons) && Hexagons.body.map(i => (
               <Hexagon q={i.q} r={i.r} s={i.s} >
                 <Text>{i.hex_name.name}</Text>
               </Hexagon>
