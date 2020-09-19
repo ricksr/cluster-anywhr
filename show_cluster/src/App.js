@@ -1,12 +1,11 @@
 import React, {useEffect, useState, useCallback} from 'react';
-import { HexGrid, Layout, Hexagon, GridGenerator, Text } from 'react-hexgrid';
+import { HexGrid, Layout, Hexagon, Text } from 'react-hexgrid';
 import {Input, Button, InputGroup} from 'reactstrap';
-import { isEmpty, constant } from 'lodash-es';
+import { isEmpty } from 'lodash-es';
 
 import anywhr from './anywhr.png';
 import styles from './Contain.css';
 import './Hex.css'
-import dat from './fetcher';
 const axios = require('axios');
 
 
@@ -14,38 +13,49 @@ const url = "https://24tflrq9y9.execute-api.us-east-1.amazonaws.com/prod/";
 const App = () => {
   const [hexName, setHexName] = useState();
   const [newHex, setNewHex] = useState();
+  const [srcHex, setSrcHex] = useState();
+  const [side, setSide] = useState();
   const [dogs, setDogs] = useState([]);
-  const [vals, setVals] = useState({});
+  const [vals, setVals] = useState([]);
+  const [search, setSearch] = useState(false);
 
   const handleHexName = (e) => {setHexName(e.target.value);}
   const handleNewHex = (e) => {setNewHex(e.target.value);}
+  const handleSrcHex = (e) => {setSrcHex(e.target.value);}
+  const handleSide = (e) => {setSide(e.target.value);}
 
   const loadDogs = useCallback(() => {
     axios.get(`${url}get-all-coordinates`).then((response) => {
-      console.log(response);
+      // console.log(response);
       setDogs(response.data);
     });
   }, []);
 
   useEffect(() => {
-    console.log(module);
+   
     loadDogs();
   }, [loadDogs]);
 
 
-  const handleSearchSubmit = (e) => {
-    console.log(hexName);
-    console.log(dogs);
-
+  const handleSearchSubmit = () => {
     axios.get(`${url}get-hex-by-name?name=${hexName}`).then((response) => {
       setVals(response);
-      alert(vals);
+      setSearch(true);
+      console.log(response)
+      !isEmpty(response.data) && response.data.hexagons.map(i => {
+        vals.push(i);
+        setVals(vals);
+
+      })
+      alert('Please see here - '+`${url}get-hex-by-name?name=${hexName}`);
+      // console.log(vals)
     });
   }
 
   const handleAddSubmit = (e) => {
-    console.log(e);
-    console.log(newHex);
+    axios.post(`${url}add-hex?src=${srcHex}&new=${newHex}&loc=${side}`).then((response) => {
+      loadDogs();
+    });
   }
   
   
@@ -78,9 +88,25 @@ const App = () => {
             className={styles.inputBox}
             type="text"
             placeholder="Add a Hex"
-            name="Search Hex"
+            name="New Hex Name"
             value={newHex}
             onChange={handleNewHex}
+          />
+          <Input
+            className={styles.inputBox}
+            type="text"
+            placeholder="New Hex Source"
+            name="Name src"
+            value={srcHex}
+            onChange={handleSrcHex}
+          />
+          <Input
+            className={styles.inputBox}
+            type="text"
+            placeholder="which side of Source - 0--5"
+            name="Search Hex"
+            value={side}
+            onChange={handleSide}
           />
           </InputGroup>
           <br />

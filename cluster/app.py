@@ -2,8 +2,6 @@ import json
 from flask import Flask, request
 from flask_cors import CORS
 
-# from flask_cors import CORS, cross_origin
-# import helpers
 from helpers.utils import utils
 from helpers.db import queries
 from helpers.algo import boundary
@@ -80,7 +78,7 @@ def add_hex():
         logger(origin_coordinates_hex)
         origin_id = origin_coordinates_hex.get("hexagons")[0].get(
             'location', '').get('hexagon_id', '')
-        # todo
+       
         # Find location of the new hex
         # find neighbours around it , if present query their cluster table rows
 
@@ -130,4 +128,3 @@ def add_hex():
     else:
         return {'response': 'err'}
 
-# app.run()

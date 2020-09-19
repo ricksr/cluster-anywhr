@@ -5,11 +5,11 @@ from ..utils import utils
 
 def find_new_hex_neighbours(loc, boundary_of_origin_hex):
     if (boundary_of_origin_hex>=0 and boundary_of_origin_hex<=5):
-        f1 = True and not(boundary_of_origin_hex==0)
-        f2 = True and not(boundary_of_origin_hex==1)
-        f3 = True and not(boundary_of_origin_hex==2)
-        f4 = True and not(boundary_of_origin_hex==3)
-        f5 = True and not(boundary_of_origin_hex==4)
+        # f1 = True and not(boundary_of_origin_hex==0)
+        # f2 = True and not(boundary_of_origin_hex==1)
+        # f3 = True and not(boundary_of_origin_hex==2)
+        # f4 = True and not(boundary_of_origin_hex==3)
+        # f5 = True and not(boundary_of_origin_hex==4)
 
         resp = {}
 
@@ -34,5 +34,5 @@ def find_new_hex_neighbours(loc, boundary_of_origin_hex):
         resp["n5"] = "NO" if len(resp["n5"])==0 else resp["n5"][0]
         resp["n6"] = "NO" if len(resp["n6"])==0 else resp["n6"][0]
         # resp.pop(utils.user_boundary_choice[boundary_of_origin_hex])
-        print(resp)
+        # print(resp)
     return resp
