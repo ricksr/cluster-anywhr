@@ -76,6 +76,13 @@ def add_hex():
         origin_coordinates_hex = queries.get_hex_location_by_name(origin_hex)
         logger('-----here-----get_hex_location_by_name-origin---')
         logger(origin_coordinates_hex)
+
+        origin_existing_neighbours = queries.get_hex_details_by_name(
+            origin_hex).get("hexagons", "")[0].get("hex", "")
+
+        if origin_existing_neighbours[utils.user_boundary_choice[boundary_of_origin_hex]] != 'NO':
+            return {'err': 'already a hex exists at this boundary'}
+
         origin_id = origin_coordinates_hex.get("hexagons")[0].get(
             'location', '').get('hexagon_id', '')
 
@@ -125,7 +132,7 @@ def add_hex():
             {"data": origin_req, "colm": column_updates})
         logger("----moving to update----")
         update_neighbours(new_hex_neighbours)
-        
+
         return {"statusCode": 200, 'response': update_origin_hex_neighbour}
     else:
         return {'response': 'err'}
