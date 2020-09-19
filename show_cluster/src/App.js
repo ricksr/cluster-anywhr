@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { HexGrid, Layout, Hexagon, Text } from 'react-hexgrid';
 import { Input, Button, InputGroup } from 'reactstrap';
-import { isEmpty, size } from 'lodash-es';
+import { isEmpty } from 'lodash-es';
 
 import anywhr from './anywhr.png';
 import styles from './Contain.css';
@@ -54,13 +54,13 @@ const App = () => {
     });
   }
 
-  const handleAddSubmit = async (e) => {
-    await axios.post(`${url}add-hex?src=${srcHex}&new=${newHex}&loc=${side}`).then((response) => {
+  const handleAddSubmit = async () => {
+    await axios.post(`${url}add-hex?src=${srcHex}&new=${newHex}&loc=${side}`).then(() => {
       loadHexagons();
     });
   }
 
-  const handleRemoveSubmit = async (e) => {
+  const handleRemoveSubmit = async () => {
     await axios.post(`${url}remove-hex?src=${removeHexName}`).then((response) => {
       if (response.data.err) {
         alert('Not possible to remove')
