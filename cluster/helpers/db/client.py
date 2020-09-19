@@ -16,7 +16,7 @@ def run_query(query, variables):
 def _make_post_call(body):
     url = os.environ['HASURA_GRAPHQL_ENDPOINT']
     secret = os.environ['HASURA_ADMIN_SECRET']
-   
+
     headers = {
         'Content-type': 'application/json',
         'x-hasura-admin-secret': secret

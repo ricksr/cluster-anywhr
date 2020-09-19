@@ -77,6 +77,28 @@ def get_hex_location_by_name(name):
     return response
 
 
+def get_hex_location_by_id(id):
+    query = ''' 
+        query hex_location($id: uuid!) {
+            hexagons(
+                where: {
+                    id: {_eq: $id}
+                }
+            ) {
+                location {
+                    hexagon_id q r s
+                }
+            }
+        }
+    '''
+    variables = {
+        "id": id
+    }
+    response = run_query(query, variables)
+    print(response)
+    return response
+
+
 def get_hex_id_by_location(q, r, s):
     query = ''' 
         query get_hex_byLoc($q: Int!, $r: Int!, $s: Int!) {
@@ -99,6 +121,7 @@ def get_hex_id_by_location(q, r, s):
     print(response)
     return response.get("locations", "")
 
+
 def get_all_locations():
     query = ''' 
         query all_locations {
@@ -116,7 +139,7 @@ def get_all_locations():
             }
         }
     '''
-    variables = { }
+    variables = {}
     response = run_query(query, variables)
     print(response)
     return response.get("locations", "")
@@ -238,6 +261,7 @@ def delete_hex(name):
     print(response)
     return response.get("insert_hexagons", "").get("returning", "")
 
+
 def find_neighbours_by_name(name):
     query = '''
         query hexagons($name: String!) {
@@ -259,4 +283,3 @@ def find_neighbours_by_name(name):
     response = run_query(query, variables)
     print(response)
     return response.get("hexagons", "")
-

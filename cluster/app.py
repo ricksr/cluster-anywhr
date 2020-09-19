@@ -49,7 +49,7 @@ def search_hex_byId():
             return resp
     else:
         return {"Please enter the id correctly to get all the details"}
-    return {"err":'Network Error'}
+    return {"err": 'Network Error'}
 
 
 @app.route('/get-all-coordinates', methods=['GET', 'POST'])
@@ -60,7 +60,7 @@ def get_all_coords():
         logger(coords)
         return {'body': coords}
     except:
-        return {"err":'Network Error'}
+        return {"err": 'Network Error'}
 
 
 @app.route('/add-hex', methods=['GET', 'POST'])
@@ -124,9 +124,42 @@ def add_hex():
         update_origin_hex_neighbour = queries.insert_hex_neighbours(
             {"data": origin_req, "colm": column_updates})
 
+        update_neighbours(new_hex_neighbours)
+
         return {"statusCode": 200, 'response': update_origin_hex_neighbour}
     else:
         return {'response': 'err'}
+
+
+def update_neighbours(updating_neighbours):
+    all_borders = ['n1', 'n2', 'n3', 'n4', 'n5', 'n6']
+
+    for border in all_borders:
+        if not(updating_neighbours[border] == 'NO'):
+            hex_id = updating_neighbours['n1']
+
+            neighbour_location_obj = queries.get_hex_location_by_id(hex_id)
+
+            neighbour_location_dict = neighbour_location_obj.get(
+                'hexagons', [{'location': {}}])[0].get('location', '')
+
+            if(neighbour_location_dict):
+                loc = [
+                    neighbour_location_dict['q'],
+                    neighbour_location_dict['r'],
+                    neighbour_location_dict['s']
+                ]
+                updated_neighbours = neighbours.find_new_hex_neighbours(loc, 1)
+
+                updated_neighbours["hexagon_id"] = hex_id
+                logger(updated_neighbours)
+                column_updates = ['n1', 'n2', 'n3',
+                                  'n4', 'n5', 'n6', 'updated_at']
+                insert_updated_neighbours = queries.insert_hex_neighbours(
+                    {"data": updated_neighbours, "colm": column_updates})
+
+                return {"body": insert_updated_neighbours}
+    return {"err": "error"}
 
 
 @app.route('/remove-hex', methods=['GET', 'POST'])
@@ -138,31 +171,30 @@ def delete_hex():
         try:
             neighbours_of_origin = queries.find_neighbours_by_name(origin_hex)
         except:
-            return {"err":"error"}
+            return {"err": "error"}
         degrees = 6
         neighbours_of_origin = neighbours_of_origin[0]
 
-        if neighbours_of_origin.get("hex","").get("n1","") == "NO":
+        if neighbours_of_origin.get("hex", "").get("n1", "") == "NO":
             degrees = degrees - 1
-        if neighbours_of_origin.get("hex","").get("n2","") == "NO":
+        if neighbours_of_origin.get("hex", "").get("n2", "") == "NO":
             degrees = degrees - 1
-        if neighbours_of_origin.get("hex","").get("n3","") == "NO":
+        if neighbours_of_origin.get("hex", "").get("n3", "") == "NO":
             degrees = degrees - 1
-        if neighbours_of_origin.get("hex","").get("n4","") == "NO":
+        if neighbours_of_origin.get("hex", "").get("n4", "") == "NO":
             degrees = degrees - 1
-        if neighbours_of_origin.get("hex","").get("n5","") == "NO":
+        if neighbours_of_origin.get("hex", "").get("n5", "") == "NO":
             degrees = degrees - 1
-        if neighbours_of_origin.get("hex","").get("n6","") == "NO":
+        if neighbours_of_origin.get("hex", "").get("n6", "") == "NO":
             degrees = degrees - 1
-        
-        
+
         if degrees > 2:
             try:
                 deletion_resp = queries.delete_hex(origin_hex)
                 return {"body": deletion_resp}
             except:
-                return {"err":"error"}
+                return {"err": "error"}
         else:
-            return {"err":"Not possible to remove"}
+            return {"err": "Not possible to remove"}
     else:
-        return {"err":"provide valid name"}
+        return {"err": "provide valid name"}
