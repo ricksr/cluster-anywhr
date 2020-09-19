@@ -25,3 +25,15 @@ comfortable :
 
 Tech stacks : python , flask, JS , reactjs , aws lambda , serverless , graphql
 
+Local setup - backend:
+1. clone it
+2. cluster (  move to cluster directory)
+3. https://github.com/ricksr/cluster-anywhr/edit/master/cluster/README.md   ( Follow this )
+
+Local setup - Frontend:
+1. show_cluster( move to show_cluster directory )
+2. npm i
+3. npm start
+4. change url in app.js to localhost:3000/prod/ , to make it point to local setup , initially it is setted to hosted aws URL
+
+
