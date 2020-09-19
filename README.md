@@ -4,7 +4,7 @@ cluster contains the API
 cluster-shows contains the Front end form and hex structure
 
 in cluster :
-overview :
+## overview :
 
 1. You can add a hexagon to a node and it gets reflected
 2. one you add , it gets connected to its neghbour and reflected in the grid structure in frontend
@@ -13,7 +13,7 @@ overview :
 
 used aws - lambdas for API's
 
-DB - idea :
+## DB - idea :
 Three table :
 
 1. hexagons: uniquely identifies a Hexagon 
@@ -21,7 +21,21 @@ Three table :
 3. locations: uniquely locates a hex 
 
 
-comfortable :
+## comfortable :
 
-Tech stacks : python , flask, JS , reactjs , aws lambda , serverless , graphql
+#### Tech stacks : 
+python , flask, JS , reactjs , aws lambda , serverless , graphql
 
+## Local setup - backend:
+1. clone it
+2. cluster (  move to cluster directory)
+3. https://github.com/ricksr/cluster-anywhr/edit/master/cluster/README.md   ( Follow this )
+
+## Local setup - Frontend:
+1. show_cluster( move to show_cluster directory )
+2. npm i
+3. npm start
+4. change url in app.js to localhost:3000/prod/ , to make it point to local setup , initially it is setted to hosted aws URL
+
+## Result
+<img src='https://github.com/ricksr/cluster-anywhr/blob/master/show_cluster/public/Screenshot%20from%202020-09-19%2012-58-56.png' />
