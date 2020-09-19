@@ -7,6 +7,8 @@ __pycache__/
 *.so
 
 # Distribution / packaging
+.vscode
+.serverless
 .Python
 build/
 develop-eggs/

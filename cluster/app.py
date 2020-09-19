@@ -123,26 +123,25 @@ def add_hex():
 
         update_origin_hex_neighbour = queries.insert_hex_neighbours(
             {"data": origin_req, "colm": column_updates})
-
+        logger("----moving to update----")
         update_neighbours(new_hex_neighbours)
-
+        
         return {"statusCode": 200, 'response': update_origin_hex_neighbour}
     else:
         return {'response': 'err'}
 
 
 def update_neighbours(updating_neighbours):
-    all_borders = ['n1', 'n2', 'n3', 'n4', 'n5', 'n6']
-
-    for border in all_borders:
-        if not(updating_neighbours[border] == 'NO'):
-            hex_id = updating_neighbours['n1']
-
+    # logger(updating_neighbours)
+    for border in updating_neighbours:
+        if (updating_neighbours[border] != 'NO'):
+            hex_id = updating_neighbours[border]
+            # logger(hex_id)
             neighbour_location_obj = queries.get_hex_location_by_id(hex_id)
 
             neighbour_location_dict = neighbour_location_obj.get(
                 'hexagons', [{'location': {}}])[0].get('location', '')
-
+            # logger(neighbour_location_dict)
             if(neighbour_location_dict):
                 loc = [
                     neighbour_location_dict['q'],
@@ -152,7 +151,7 @@ def update_neighbours(updating_neighbours):
                 updated_neighbours = neighbours.find_new_hex_neighbours(loc, 1)
 
                 updated_neighbours["hexagon_id"] = hex_id
-                logger(updated_neighbours)
+                # logger(updated_neighbours)
                 column_updates = ['n1', 'n2', 'n3',
                                   'n4', 'n5', 'n6', 'updated_at']
                 insert_updated_neighbours = queries.insert_hex_neighbours(
