@@ -136,7 +136,9 @@ def add_hex():
 
         update_origin_hex_neighbour = queries.insert_hex_neighbours(
             {"data": origin_req, "colm": column_updates})
+
         logger("----moving to update----")
+
         update_neighbours(new_hex_neighbours)
 
         return {"statusCode": 200, 'response': update_origin_hex_neighbour}
@@ -214,19 +216,17 @@ def delete_hex():
                         "hex", "").get(border, "")
                     # level 3
                     # check if the degree of the neighbour >= 2 , i.e hotspot
-                    
-                    # print(details_neighbour_hex)
+
                     details_neighbour_hex = queries.get_hex_details_by_id(
                         neighbour_id).get("hexagons", "")
-                    print('--------------hiiiii-----',details_neighbour_hex)
 
-                    if len(details_neighbour_hex) > 0: 
+                    if len(details_neighbour_hex) > 0:
                         details_neighbour_hex = details_neighbour_hex[0]
                         degrees_level_two = calc_degree(details_neighbour_hex)
                         if degrees_level_two >= 2:
                             hotspot_or_not = hotspot_or_not + 1
-            
-            # if more than two hot spot exists then it can be removed 
+
+            # if more than two hot spot exists then it can be removed
             if hotspot_or_not > 2:
                 # border{n1 n2 ... n6} neighbour id
                 for border in borders:
@@ -238,7 +238,8 @@ def delete_hex():
                         {"data": origin_req, "colm": column_updates})
 
                 try:
-                    deletion_resp = queries.delete_hex(origin_hex, origin_hex_id)
+                    deletion_resp = queries.delete_hex(
+                        origin_hex, origin_hex_id)
                     return {"body": deletion_resp}
                 except:
                     return {"err": "error"}
