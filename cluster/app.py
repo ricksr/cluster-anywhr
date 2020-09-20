@@ -27,8 +27,7 @@ def search_hex_byName():
             logger(resp)
             return resp
         except:
-            logger(resp)
-            return resp
+            return {"err" : "error"}
     else:
         return {"Please enter the name correctly to get all the details"}
     return {'Network Error'}
@@ -72,7 +71,7 @@ def add_hex():
     boundary_of_origin_hex = request.args['loc']
     boundary_of_origin_hex = int(boundary_of_origin_hex)
 
-    if(origin_hex and new_hex and boundary_of_origin_hex):
+    if(origin_hex and new_hex and (boundary_of_origin_hex >= 0)):
         origin_coordinates_hex = queries.get_hex_location_by_name(origin_hex)
 
         logger('-----here-----get_hex_location_by_name-origin---')
