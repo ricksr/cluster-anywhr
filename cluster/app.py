@@ -198,72 +198,22 @@ def delete_hex():
             degrees = degrees - 1
 
         if degrees > 2:
+            borders = ['n1', 'n2', 'n3', 'n4', 'n4', 'n5', 'n6']
+            border_map = {'n1': 'n4', 'n2': 'n5', 'n3': 'n6',
+                          'n4': 'n1', 'n5': 'n2', 'n6': 'n3'}
 
-            if neighbours_of_origin.get("hex", "").get("n1", "") != "NO":
-                neighbour_id = neighbours_of_origin.get(
-                    "hex", "").get("n1", "")
-                # n4 neighbour id
-                origin_req = {}
-                origin_req["hexagon_id"] = neighbour_id
-                origin_req["n4"] = "NO"
-                column_updates = ["n4", "updated_at"]
-                insert_updated_neighbours = queries.insert_hex_neighbours(
-                    {"data": origin_req, "colm": column_updates})
+            for border in borders:
 
-            if neighbours_of_origin.get("hex", "").get("n2", "") != "NO":
-                neighbour_id = neighbours_of_origin.get(
-                    "hex", "").get("n2", "")
-                # n5 neighbour id
-                origin_req = {}
-                origin_req["hexagon_id"] = neighbour_id
-                origin_req["n5"] = "NO"
-                column_updates = ["n5", "updated_at"]
-                insert_updated_neighbours = queries.insert_hex_neighbours(
-                    {"data": origin_req, "colm": column_updates})
-
-            if neighbours_of_origin.get("hex", "").get("n3", "") != "NO":
-                neighbour_id = neighbours_of_origin.get(
-                    "hex", "").get("n3", "")
-                # n6 neighbour id
-                origin_req = {}
-                origin_req["hexagon_id"] = neighbour_id
-                origin_req["n6"] = "NO"
-                column_updates = ["n6", "updated_at"]
-                insert_updated_neighbours = queries.insert_hex_neighbours(
-                    {"data": origin_req, "colm": column_updates})
-
-            if neighbours_of_origin.get("hex", "").get("n4", "") != "NO":
-                neighbour_id = neighbours_of_origin.get(
-                    "hex", "").get("n4", "")
-                # n1 neighbour id
-                origin_req = {}
-                origin_req["hexagon_id"] = neighbour_id
-                origin_req["n1"] = "NO"
-                column_updates = ["n1", "updated_at"]
-                insert_updated_neighbours = queries.insert_hex_neighbours(
-                    {"data": origin_req, "colm": column_updates})
-
-            if neighbours_of_origin.get("hex", "").get("n5", "") != "NO":
-                neighbour_id = neighbours_of_origin.get(
-                    "hex", "").get("n5", "")
-                # n2 neighbour id
-                origin_req = {}
-                origin_req["hexagon_id"] = neighbour_id
-                origin_req["n2"] = "NO"
-                column_updates = ["n2", "updated_at"]
-                insert_updated_neighbours = queries.insert_hex_neighbours(
-                    {"data": origin_req, "colm": column_updates})
-
-            if neighbours_of_origin.get("hex", "").get("n6", "") != "NO":
-                neighbour_id = neighbours_of_origin.get(
-                    "hex", "").get("n6", "")
-                # n3 neighbour id
-                origin_req = {}
-                origin_req["hexagon_id"] = neighbour_id
-                origin_req["n3"] = "NO"
-                column_updates = ["n3", "updated_at"]
-                insert_updated_neighbours = queries.insert_hex_neighbours(
-                    {"data": origin_req, "colm": column_updates})
+                if neighbours_of_origin.get("hex", "").get(border, "") != "NO":
+                    neighbour_id = neighbours_of_origin.get(
+                        "hex", "").get(border, "")
+                    # n4 neighbour id
+                    origin_req = {}
+                    origin_req["hexagon_id"] = neighbour_id
+                    origin_req[border_map[border]] = "NO"
+                    column_updates = [border_map[border], "updated_at"]
+                    insert_updated_neighbours = queries.insert_hex_neighbours(
+                        {"data": origin_req, "colm": column_updates})
 
             try:
                 deletion_resp = queries.delete_hex(origin_hex, origin_hex_id)
