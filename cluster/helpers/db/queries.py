@@ -242,10 +242,30 @@ def insert_new_hex_loc(hexagon_id, q, r, s):
     return response.get("insert_locations", "").get("returning", "")
 
 
-def delete_hex(name):
+def delete_hex(name, hexagon_id):
     query = '''
-        mutation insert_hexagons($name: String!) {
-            insert_hexagons(objects: {is_active: "FALSE", name: $name}, on_conflict: {constraint: hexagons_name_key, update_columns: is_active}) {
+        mutation insert_hexagons($name: String!, $hexagon_id: uuid!) {
+            insert_hexagons(
+                objects: {
+                    is_active: "FALSE", 
+                    name: $name, 
+                    hex: {
+                        data: {
+                            hexagon_id: $hexagon_id, 
+                            n1: "NO", 
+                            n2: "NO", 
+                            n3: "NO", 
+                            n4: "NO", 
+                            n5: "NO", 
+                            n6: "NO"
+                        }, 
+                        on_conflict: {
+                            constraint: clusters_hexagon_id_key, 
+                            update_columns: [n1, n2, n3, n4, n5, n6, updated_at]
+                        }
+                    }
+                }, 
+                on_conflict: {constraint: hexagons_name_key, update_columns: is_active}) {
                 returning {
                     is_active
                     name
@@ -255,7 +275,8 @@ def delete_hex(name):
         }
     '''
     variables = {
-        "name": name
+        "name": name,
+        "hexagon_id": hexagon_id
     }
     response = run_query(query, variables)
     print(response)
@@ -273,6 +294,7 @@ def find_neighbours_by_name(name):
                     n4
                     n5
                     n6
+                    hexagon_id
                 }
             }
         }

@@ -1,0 +1,85 @@
+{
+  "version": 2,
+  "tables": [
+    {
+      "table": {
+        "schema": "public",
+        "name": "clusters"
+      },
+      "object_relationships": [
+        {
+          "name": "hex_id",
+          "using": {
+            "manual_configuration": {
+              "remote_table": {
+                "schema": "public",
+                "name": "hexagons"
+              },
+              "column_mapping": {
+                "hexagon_id": "id"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "table": {
+        "schema": "public",
+        "name": "hexagons"
+      },
+      "object_relationships": [
+        {
+          "name": "hex",
+          "using": {
+            "manual_configuration": {
+              "remote_table": {
+                "schema": "public",
+                "name": "clusters"
+              },
+              "column_mapping": {
+                "id": "hexagon_id"
+              }
+            }
+          }
+        },
+        {
+          "name": "location",
+          "using": {
+            "manual_configuration": {
+              "remote_table": {
+                "schema": "public",
+                "name": "locations"
+              },
+              "column_mapping": {
+                "id": "hexagon_id"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "table": {
+        "schema": "public",
+        "name": "locations"
+      },
+      "object_relationships": [
+        {
+          "name": "hex_name",
+          "using": {
+            "manual_configuration": {
+              "remote_table": {
+                "schema": "public",
+                "name": "hexagons"
+              },
+              "column_mapping": {
+                "hexagon_id": "id"
+              }
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
