@@ -27,7 +27,7 @@ def search_hex_byName():
             logger(resp)
             return resp
         except:
-            return {"err" : "error"}
+            return {"err": "error"}
     else:
         return {"Please enter the name correctly to get all the details"}
     return {'Network Error'}
@@ -188,6 +188,7 @@ def delete_hex():
             return {"err": "error"}
 
         # Constants
+
         degrees = 6
         borders = ['n1', 'n2', 'n3', 'n4', 'n4', 'n5', 'n6']
         border_map = {'n1': 'n4', 'n2': 'n5', 'n3': 'n6',
@@ -198,41 +199,33 @@ def delete_hex():
         origin_hex_id = neighbours_of_origin.get(
             "hex", "").get("hexagon_id", "")
 
-        # for border in borders:
-        if neighbours_of_origin.get("hex", "").get('n1', "") == "NO":
-            degrees = degrees - 1
-            logger(neighbours_of_origin.get("hex", "").get('n1', ""))
-        
-        if neighbours_of_origin.get("hex", "").get('n2', "") == "NO":
-            degrees = degrees - 1
-            logger(neighbours_of_origin.get("hex", "").get('n2', ""))
-        
-        if neighbours_of_origin.get("hex", "").get('n3', "") == "NO":
-            degrees = degrees - 1
-            logger(neighbours_of_origin.get("hex", "").get('n3', ""))
-        
-        if neighbours_of_origin.get("hex", "").get('n4', "") == "NO":
-            degrees = degrees - 1
-            logger(neighbours_of_origin.get("hex", "").get('n4', ""))
-        
-        if neighbours_of_origin.get("hex", "").get('n5', "") == "NO":
-            degrees = degrees - 1
-            logger(neighbours_of_origin.get("hex", "").get('n5', ""))
-        
-        if neighbours_of_origin.get("hex", "").get('n6', "") == "NO":
-            degrees = degrees - 1
-            logger(neighbours_of_origin.get("hex", "").get('n6', ""))
-        
+        degrees = calc_degree(neighbours_of_origin)
+
         logger(degrees)
 
         if degrees > 2:
 
-            for border in borders:
+            hotspot_or_not = 0
 
+            for border in borders:
+                # Level 2
                 if neighbours_of_origin.get("hex", "").get(border, "") != "NO":
                     neighbour_id = neighbours_of_origin.get(
                         "hex", "").get(border, "")
-                    # border{n1 n2 ... n6} neighbour id
+                    # level 3
+                    # check if the degree of the neighbour >= 2 , i.e hotspot
+                    
+                    details_neighbour_hex = queries.get_hex_details_by_id(
+                        neighbour_id).get("hexagons", "")[0]
+
+                    degrees_level_two = calc_degree(details_neighbour_hex)
+                    if degrees_level_two >= 2:
+                        hotspot_or_not = hotspot_or_not + 1
+            
+            # if more than two hot spot exists then it can be removed 
+            if hotspot_or_not > 2:
+                # border{n1 n2 ... n6} neighbour id
+                for border in borders:
                     origin_req = {}
                     origin_req["hexagon_id"] = neighbour_id
                     origin_req[border_map[border]] = "NO"
@@ -240,12 +233,44 @@ def delete_hex():
                     insert_updated_neighbours = queries.insert_hex_neighbours(
                         {"data": origin_req, "colm": column_updates})
 
-            try:
-                deletion_resp = queries.delete_hex(origin_hex, origin_hex_id)
-                return {"body": deletion_resp}
-            except:
-                return {"err": "error"}
+                try:
+                    deletion_resp = queries.delete_hex(origin_hex, origin_hex_id)
+                    return {"body": deletion_resp}
+                except:
+                    return {"err": "error"}
+            else:
+                return {"err": "Not possible to remove"}
         else:
             return {"err": "Not possible to remove"}
     else:
         return {"err": "provide valid name"}
+
+
+def calc_degree(neighbours_of_origin):
+    degrees = 6
+    # for border in borders:
+    if neighbours_of_origin.get("hex", "").get('n1', "") == "NO":
+        degrees = degrees - 1
+        logger(neighbours_of_origin.get("hex", "").get('n1', ""))
+
+    if neighbours_of_origin.get("hex", "").get('n2', "") == "NO":
+        degrees = degrees - 1
+        logger(neighbours_of_origin.get("hex", "").get('n2', ""))
+
+    if neighbours_of_origin.get("hex", "").get('n3', "") == "NO":
+        degrees = degrees - 1
+        logger(neighbours_of_origin.get("hex", "").get('n3', ""))
+
+    if neighbours_of_origin.get("hex", "").get('n4', "") == "NO":
+        degrees = degrees - 1
+        logger(neighbours_of_origin.get("hex", "").get('n4', ""))
+
+    if neighbours_of_origin.get("hex", "").get('n5', "") == "NO":
+        degrees = degrees - 1
+        logger(neighbours_of_origin.get("hex", "").get('n5', ""))
+
+    if neighbours_of_origin.get("hex", "").get('n6', "") == "NO":
+        degrees = degrees - 1
+        logger(neighbours_of_origin.get("hex", "").get('n6', ""))
+
+    return int(degrees)
