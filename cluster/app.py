@@ -215,12 +215,16 @@ def delete_hex():
                     # level 3
                     # check if the degree of the neighbour >= 2 , i.e hotspot
                     
+                    # print(details_neighbour_hex)
                     details_neighbour_hex = queries.get_hex_details_by_id(
-                        neighbour_id).get("hexagons", "")[0]
+                        neighbour_id).get("hexagons", "")
+                    print('--------------hiiiii-----',details_neighbour_hex)
 
-                    degrees_level_two = calc_degree(details_neighbour_hex)
-                    if degrees_level_two >= 2:
-                        hotspot_or_not = hotspot_or_not + 1
+                    if len(details_neighbour_hex) > 0: 
+                        details_neighbour_hex = details_neighbour_hex[0]
+                        degrees_level_two = calc_degree(details_neighbour_hex)
+                        if degrees_level_two >= 2:
+                            hotspot_or_not = hotspot_or_not + 1
             
             # if more than two hot spot exists then it can be removed 
             if hotspot_or_not > 2:
