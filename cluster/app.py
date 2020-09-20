@@ -198,9 +198,32 @@ def delete_hex():
         origin_hex_id = neighbours_of_origin.get(
             "hex", "").get("hexagon_id", "")
 
-        for border in borders:
-            if neighbours_of_origin.get("hex", "").get(border, "") == "NO":
-                degrees = degrees - 1
+        # for border in borders:
+        if neighbours_of_origin.get("hex", "").get('n1', "") == "NO":
+            degrees = degrees - 1
+            logger(neighbours_of_origin.get("hex", "").get('n1', ""))
+        
+        if neighbours_of_origin.get("hex", "").get('n2', "") == "NO":
+            degrees = degrees - 1
+            logger(neighbours_of_origin.get("hex", "").get('n2', ""))
+        
+        if neighbours_of_origin.get("hex", "").get('n3', "") == "NO":
+            degrees = degrees - 1
+            logger(neighbours_of_origin.get("hex", "").get('n3', ""))
+        
+        if neighbours_of_origin.get("hex", "").get('n4', "") == "NO":
+            degrees = degrees - 1
+            logger(neighbours_of_origin.get("hex", "").get('n4', ""))
+        
+        if neighbours_of_origin.get("hex", "").get('n5', "") == "NO":
+            degrees = degrees - 1
+            logger(neighbours_of_origin.get("hex", "").get('n5', ""))
+        
+        if neighbours_of_origin.get("hex", "").get('n6', "") == "NO":
+            degrees = degrees - 1
+            logger(neighbours_of_origin.get("hex", "").get('n6', ""))
+        
+        logger(degrees)
 
         if degrees > 2:
 
