@@ -151,8 +151,8 @@ def insert_new_hex(name):
             insert_clusters(
                 objects: {
                     hex_id: {
-                        data: {name: $name}, 
-                        on_conflict: {constraint: hexagons_name_key, update_columns: updated_at}
+                        data: {name: $name, is_active: "TRUE"}, 
+                        on_conflict: {constraint: hexagons_name_key, update_columns: [updated_at, is_active]}
                     }
                 }, 
                 on_conflict: {

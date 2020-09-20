@@ -74,6 +74,7 @@ def add_hex():
 
     if(origin_hex and new_hex and boundary_of_origin_hex):
         origin_coordinates_hex = queries.get_hex_location_by_name(origin_hex)
+
         logger('-----here-----get_hex_location_by_name-origin---')
         logger(origin_coordinates_hex)
 
@@ -90,27 +91,33 @@ def add_hex():
         # find neighbours around it , if present query their cluster table rows
 
         new_hex_loc = boundary.find_new_hex_loc(
-            boundary_of_origin_hex, origin_hex, origin_coordinates_hex)
+            boundary_of_origin_hex, origin_hex, origin_coordinates_hex)  # New Hex location
 
         logger('-----here-----new-hex-loc-using-origin-loc-and-border---')
         logger(new_hex_loc)
+
         new_hex_neighbours = neighbours.find_new_hex_neighbours(
-            new_hex_loc, boundary_of_origin_hex)
+            new_hex_loc, boundary_of_origin_hex)                       # Neighbours around new hex
 
         # insertions new hex // fetch id
         logger('-----here-----inserting-new-node---')
+
         insert_new_hex_resp = queries.insert_new_hex(new_hex)
         new_hexagon_id = list(map(lambda data: data.get(
             'hexagon_id'),  insert_new_hex_resp))[0]
+
         logger(new_hexagon_id)
 
         # insert neighbours of new node
         logger('-----here-----inserting-new-node-neighbours---')
+
         new_hex_neighbours["hexagon_id"] = new_hexagon_id
+
         logger(new_hex_neighbours)
+
         column_updates = ['n1', 'n2', 'n3', 'n4', 'n5', 'n6', 'updated_at']
         insert_new_hex_neighbours = queries.insert_hex_neighbours(
-            {"data": new_hex_neighbours, "colm": column_updates})
+            {"data": new_hex_neighbours, "colm": column_updates})          # Inserting New hex Neighs. in cluster
 
         # insert location of new node
 
@@ -157,6 +164,8 @@ def update_neighbours(updating_neighbours):
                 ]
                 updated_neighbours = neighbours.find_new_hex_neighbours(loc, 1)
 
+                logger(updated_neighbours)
+
                 updated_neighbours["hexagon_id"] = hex_id
                 # logger(updated_neighbours)
                 column_updates = ['n1', 'n2', 'n3',
@@ -178,36 +187,30 @@ def delete_hex():
             neighbours_of_origin = queries.find_neighbours_by_name(origin_hex)
         except:
             return {"err": "error"}
+
+        # Constants
         degrees = 6
+        borders = ['n1', 'n2', 'n3', 'n4', 'n4', 'n5', 'n6']
+        border_map = {'n1': 'n4', 'n2': 'n5', 'n3': 'n6',
+                      'n4': 'n1', 'n5': 'n2', 'n6': 'n3'}
+
         neighbours_of_origin = neighbours_of_origin[0]
 
         origin_hex_id = neighbours_of_origin.get(
             "hex", "").get("hexagon_id", "")
 
-        if neighbours_of_origin.get("hex", "").get("n1", "") == "NO":
-            degrees = degrees - 1
-        if neighbours_of_origin.get("hex", "").get("n2", "") == "NO":
-            degrees = degrees - 1
-        if neighbours_of_origin.get("hex", "").get("n3", "") == "NO":
-            degrees = degrees - 1
-        if neighbours_of_origin.get("hex", "").get("n4", "") == "NO":
-            degrees = degrees - 1
-        if neighbours_of_origin.get("hex", "").get("n5", "") == "NO":
-            degrees = degrees - 1
-        if neighbours_of_origin.get("hex", "").get("n6", "") == "NO":
-            degrees = degrees - 1
+        for border in borders:
+            if neighbours_of_origin.get("hex", "").get(border, "") == "NO":
+                degrees = degrees - 1
 
         if degrees > 2:
-            borders = ['n1', 'n2', 'n3', 'n4', 'n4', 'n5', 'n6']
-            border_map = {'n1': 'n4', 'n2': 'n5', 'n3': 'n6',
-                          'n4': 'n1', 'n5': 'n2', 'n6': 'n3'}
 
             for border in borders:
 
                 if neighbours_of_origin.get("hex", "").get(border, "") != "NO":
                     neighbour_id = neighbours_of_origin.get(
                         "hex", "").get(border, "")
-                    # n4 neighbour id
+                    # border{n1 n2 ... n6} neighbour id
                     origin_req = {}
                     origin_req["hexagon_id"] = neighbour_id
                     origin_req[border_map[border]] = "NO"
