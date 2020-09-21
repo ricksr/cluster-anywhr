@@ -136,9 +136,7 @@ def add_hex():
 
         update_origin_hex_neighbour = queries.insert_hex_neighbours(
             {"data": origin_req, "colm": column_updates})
-
         logger("----moving to update----")
-
         update_neighbours(new_hex_neighbours)
 
         return {"statusCode": 200, 'response': update_origin_hex_neighbour}
