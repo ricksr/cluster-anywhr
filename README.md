@@ -38,4 +38,4 @@ python , flask, JS , reactjs , aws lambda , serverless , graphql
 4. change url in app.js to localhost:3000/prod/ , to make it point to local setup , initially it is setted to hosted aws URL
 
 ## Result
-<img src='https://github.com/ricksr/cluster-anywhr/blob/master/show_cluster/public/Screenshot%20from%202020-09-19%2012-58-56.png' />
+<img src='https://i.ibb.co/zNjW4pG/Screenshot-from-2020-09-22-14-40-32.png' />
