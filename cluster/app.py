@@ -246,16 +246,19 @@ def delete_hex_bfs():
 
         if len(details_neighbour_hex) > 0:
             details_neighbour_hex = details_neighbour_hex[0]
+
+        count_of_entry_to_hex = 0
         # iterating in all the neighbours of the recent id
         for border in borders:
             if details_neighbour_hex.get("hex", "").get(border, "") != "NO":
                 neighbour_id = details_neighbour_hex.get(
                     "hex", "").get(border, "")
 
-                if level == 1:
+                if level == 1 and count_of_entry_to_hex == 0:
                     # reached_border.append((current_id, border))
                     reached_border.append((current, border_map[border]))
                     list(set(reached_border))
+                    count_of_entry_to_hex = count_of_entry_to_hex + 1
                 # already visited node also traversed through the same path
                 if (neighbour_id in reached) and (neighbour_id, border) in reached_border:
                     continue
@@ -281,8 +284,9 @@ def delete_hex_bfs():
                 logger(neighbour_id)
                 logger(border)
                 # reached_border.append((neighbour_id, border))
-                reached_border.append((current, border_map[border]))
-                list(set(reached_border))
+                if level > 1:
+                    reached_border.append((current, border_map[border]))
+                    list(set(reached_border))
 
     return {"err": "Not possible to remove"}
 

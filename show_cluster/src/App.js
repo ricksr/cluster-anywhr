@@ -168,7 +168,7 @@ const App = () => {
                 style={{ width: "200px", marginRight: "20px" }}
                 className={styles.inputBox}
                 type="text"
-                placeholder="Add a Hex"
+                placeholder="New Hex Name"
                 name="New Hex Name"
                 value={newHex}
                 onChange={handleNewHex}
@@ -177,7 +177,7 @@ const App = () => {
                 style={{ width: "200px", marginRight: "20px" }}
                 className={styles.inputBox}
                 type="text"
-                placeholder="New Hex Source"
+                placeholder="Source Hex Name"
                 name="Name src"
                 value={srcHex}
                 onChange={handleSrcHex}
@@ -186,7 +186,7 @@ const App = () => {
                 style={{ width: "220px", marginRight: "30px" }}
                 className={styles.inputBox}
                 type="text"
-                placeholder="which side of Source - 0--5"
+                placeholder="0 -- 5 Enter side "
                 name="Search Hex"
                 value={side}
                 onChange={handleSide}
