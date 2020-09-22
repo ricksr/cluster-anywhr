@@ -88,6 +88,7 @@ def get_hex_location_by_id(id):
                 location {
                     hexagon_id q r s
                 }
+                is_active
             }
         }
     '''

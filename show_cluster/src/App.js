@@ -1,9 +1,10 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { HexGrid, Layout, Hexagon, Text } from "react-hexgrid";
-import { Input, Button, InputGroup } from "reactstrap";
+import { Input, Button, InputGroup, Tooltip } from "reactstrap";
 import { isEmpty } from "lodash-es";
 
 import anywhr from "./anywhr.png";
+import sample_hex from "./sample_hex.png";
 import styles from "./Contain.css";
 import "./Hex.css";
 const axios = require("axios");
@@ -197,7 +198,12 @@ const App = () => {
           </div>
         </div>
       </div>
-
+      <div style={{display: "flex", marginLeft: "300px", marginTop: "30px"}}>
+        <div style={{marginTop: "25px"}}>
+          Sample Hex :
+        </div>
+        <img src={sample_hex} alt="sample_hex" style={{width: "90px", marginLeft: "20px"}} />
+        </div>
       <div className="Hex">
         <HexGrid width={1000} height={400} viewBox="-70 -70 150 100">
           <Layout size={{ x: 4, y: 4 }}>

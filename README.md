@@ -29,7 +29,7 @@ python , flask, JS , reactjs , aws lambda , serverless , graphql
 ## Local setup - backend:
 1. clone it
 2. cluster (  move to cluster directory)
-3. https://github.com/ricksr/cluster-anywhr/edit/master/cluster/README.md   ( Follow this )
+3. https://github.com/ricksr/cluster-anywhr/blob/master/cluster/README.md   ( Follow this )
 
 ## Local setup - Frontend:
 1. show_cluster( move to show_cluster directory )

@@ -155,27 +155,34 @@ def update_neighbours(updating_neighbours):
             # logger(hex_id)
             neighbour_location_obj = queries.get_hex_location_by_id(hex_id)
 
-            neighbour_location_dict = neighbour_location_obj.get(
-                'hexagons', [{'location': {}}])[0].get('location', '')
-            # logger(neighbour_location_dict)
-            if(neighbour_location_dict):
-                loc = [
-                    neighbour_location_dict['q'],
-                    neighbour_location_dict['r'],
-                    neighbour_location_dict['s']
-                ]
-                updated_neighbours = neighbours.find_new_hex_neighbours(loc, 1)
+            neighbour_is_active = neighbour_location_obj.get(
+                'hexagons', [{'location': {}}])[0].get('is_active', '')
 
-                logger(updated_neighbours)
+            if neighbour_is_active == 'TRUE':
 
-                updated_neighbours["hexagon_id"] = hex_id
-                # logger(updated_neighbours)
-                column_updates = ['n1', 'n2', 'n3',
-                                  'n4', 'n5', 'n6', 'updated_at']
-                insert_updated_neighbours = queries.insert_hex_neighbours(
-                    {"data": updated_neighbours, "colm": column_updates})
+                neighbour_location_dict = neighbour_location_obj.get(
+                    'hexagons', [{'location': {}}])[0].get('location', '')
+                # logger(neighbour_location_dict)
+                if(neighbour_location_dict):
+                    loc = [
+                        neighbour_location_dict['q'],
+                        neighbour_location_dict['r'],
+                        neighbour_location_dict['s']
+                    ]
+                    updated_neighbours = neighbours.find_new_hex_neighbours(
+                        loc, 1)
 
-                return {"body": insert_updated_neighbours}
+                    logger(updated_neighbours)
+
+                    updated_neighbours["hexagon_id"] = hex_id
+                    # logger(updated_neighbours)
+                    column_updates = ['n1', 'n2', 'n3',
+                                      'n4', 'n5', 'n6', 'updated_at']
+                    insert_updated_neighbours = queries.insert_hex_neighbours(
+                        {"data": updated_neighbours, "colm": column_updates})
+
+                    return {"body": insert_updated_neighbours}
+
     return {"err": "error"}
 
 
@@ -202,8 +209,9 @@ def delete_hex_bfs():
     origin_hex_id = neighbours_of_origin.get("hex", "").get("hexagon_id", "")
 
     degree = degrees_count.calc_degree(neighbours_of_origin)
-    if degree  < 2:
-        delete_resp = delete_hexagon_final(neighbours_of_origin, origin_hex, origin_hex_id, borders, border_map)
+    if degree < 2:
+        delete_resp = delete_hexagon_final(
+            neighbours_of_origin, origin_hex, origin_hex_id, borders, border_map)
         if delete_resp:
             return {"body": "Done!"}
         else:
@@ -218,7 +226,7 @@ def delete_hex_bfs():
     # this map for (id, border(n1, n2...n6)) to uniquely identify the path we are using
     # to find it
     reached_border = []
-    
+
     level = 0
 
     while not frontier.empty():
@@ -235,7 +243,7 @@ def delete_hex_bfs():
             if details_neighbour_hex.get("hex", "").get(border, "") != "NO":
                 neighbour_id = details_neighbour_hex.get(
                     "hex", "").get(border, "")
-                
+
                 if level == 1:
                     # reached_border.append((current_id, border))
                     reached_border.append((current, border_map[border]))
@@ -253,7 +261,7 @@ def delete_hex_bfs():
                             # if the hex is found update its neighs. and itself
                             delete_resp = delete_hexagon_final(
                                 neighbours_of_origin, origin_hex, origin_hex_id, borders, border_map)
-                            
+
                             if delete_resp:
                                 return {"body": "Done!"}
                             else:
