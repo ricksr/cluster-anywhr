@@ -7,7 +7,7 @@
 API 's
 
 // query_hex
-// https://24tflrq9y9.execute-api.us-east-1.amazonaws.com/prod/get-hex-by-name?name=a
+// https://localhost:3000/prod/get-hex-by-name?name=a
 
 {
   "hexagons": [
@@ -27,7 +27,7 @@ API 's
 }
 
 // add_hex
-// https://24tflrq9y9.execute-api.us-east-1.amazonaws.com/prod/add-hex?src=ll_4&new=ll_5&loc=5
+// https://localhost:3000/prod/add-hex?src=ll_4&new=ll_5&loc=5
 
 {
   "response": [
@@ -46,7 +46,7 @@ API 's
 
 // Removed - ll_5
 querying its neighbour ll_4
-https://24tflrq9y9.execute-api.us-east-1.amazonaws.com/prod/get-hex-by-name?name=ll_4
+https://localhost:3000/prod/get-hex-by-name?name=ll_4
  
 // ll_5 removed from border 5 - n6 , 
 
