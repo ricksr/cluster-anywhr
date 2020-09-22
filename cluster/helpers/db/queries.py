@@ -66,6 +66,7 @@ def get_hex_location_by_name(name):
                 location {
                     hexagon_id q r s
                 }
+                is_active
             }
         }
     '''
@@ -107,7 +108,10 @@ def get_hex_id_by_location(q, r, s):
                 where: {
                     q: {_eq: $q}, 
                     r: {_eq: $r}, 
-                    s: {_eq: $s}
+                    s: {_eq: $s},
+                  	hex_name: {
+                      is_active: {_eq: "TRUE"}
+                    }
                 }) { 
                 hexagon_id 
             }
@@ -287,7 +291,7 @@ def delete_hex(name, hexagon_id):
 def find_neighbours_by_name(name):
     query = '''
         query hexagons($name: String!) {
-            hexagons(where: {name: {_eq: $name}}) {
+            hexagons(where: {name: {_eq: $name}, is_active: {_eq: "TRUE"}}) {
                 hex {
                     n1
                     n2

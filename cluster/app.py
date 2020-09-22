@@ -77,6 +77,13 @@ def add_hex():
     if(origin_hex and new_hex and (boundary_of_origin_hex >= 0)):
         origin_coordinates_hex = queries.get_hex_location_by_name(origin_hex)
 
+        origin_hex_is_active_or_not = origin_coordinates_hex.get("hexagons")[0].get(
+            'is_active', '')
+
+        # checking if the src hex is_active or not
+        if origin_hex_is_active_or_not == "FALSE":
+            return {"err": "This origin hex is not active"}
+
         logger('-----here-----get_hex_location_by_name-origin---')
         logger(origin_coordinates_hex)
 
@@ -201,6 +208,7 @@ def delete_hex_bfs():
         except:
             return {"err": "error"}
 
+    # The hex is alerady deleted or doesn't exist
     if len(neighbours_of_origin) > 0:
         neighbours_of_origin = neighbours_of_origin[0]
     else:
