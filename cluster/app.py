@@ -236,6 +236,7 @@ def delete_hex_bfs():
     reached_border = []
 
     level = 0
+    count_of_origin_hits_using_diff_path = 0
 
     while not frontier.empty():
         level = level + 1
@@ -262,21 +263,24 @@ def delete_hex_bfs():
                 # already visited node also traversed through the same path
                 if (neighbour_id in reached) and (neighbour_id, border) in reached_border:
                     continue
-
+                
                 if (level > 1):
                     if ((neighbour_id not in reached) or
                             ((neighbour_id in reached) and (neighbour_id, border) not in reached_border)):
                         # the origin hex is found but not from the same path ,
                         # from a different path
                         if(neighbour_id == origin_hex_id):
-                            # if the hex is found update its neighs. and itself
-                            delete_resp = delete_hexagon_final(
-                                neighbours_of_origin, origin_hex, origin_hex_id, borders, border_map)
-
-                            if delete_resp:
-                                return {"body": "Done!"}
-                            else:
-                                return {"err": "error while removing"}
+                            count_of_origin_hits_using_diff_path = count_of_origin_hits_using_diff_path + 1
+                            # if there are 3 neighs , out of which 2 of them belongs to the same connected comp.
+                            # and the other 1 belongs other connected comp. , we need to verify its connected or not
+                            if count_of_origin_hits_using_diff_path == (degree - 1):
+                                # if the hex is found update its neighs. and itself
+                                delete_resp = delete_hexagon_final(
+                                    neighbours_of_origin, origin_hex, origin_hex_id, borders, border_map)
+                                if delete_resp:
+                                    return {"body": "Done!"}
+                                else:
+                                    return {"err": "error while removing"}
                 # mapping the new neighbour and its correspoding border
                 # so that we dom't end up seeing that id from the previous path
                 frontier.put(neighbour_id)
@@ -287,7 +291,6 @@ def delete_hex_bfs():
                 if level > 1:
                     reached_border.append((current, border_map[border]))
                     list(set(reached_border))
-
     return {"err": "Not possible to remove"}
 
 
