@@ -6,10 +6,10 @@ cluster-shows contains the Front end form and hex structure
 in cluster :
 ## overview :
 
-1. You can add a hexagon to a node and it gets reflected
-2. one you add , it gets connected to its neghbour and reflected in the grid structure in frontend
-3. you can delete a hex using its name 
-4. you can only delete , if its degree is greater than 2
+1. You can add a hexagon to a node and it gets reflected, you can only add , if there is no hex connected to that particular border .
+2. once you add , it gets connected to its neghbour and reflected in the grid structure in frontend .
+3. you can delete a hex using its name  .
+4. you can only delete , if it's not a bridge and even if it connects to other clusters ( strongly connected components ) , there are other ways to reach that particular node from that other component .
 
 used aws - lambdas for API's
 
