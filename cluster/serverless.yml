@@ -10,9 +10,9 @@ custom:
   customStage: ${opt:stage, self:provider.stage}
   customEnvironment:
     HASURA_GRAPHQL_ENDPOINT:
-      prod: https://anywhr-cluster.herokuapp.com/v1/graphql
+      prod: https://xyz.com/v1/graphql
     HASURA_ADMIN_SECRET:
-      prod: 'random'
+      prod: 'xyz'
 
 provider:
   name: aws
