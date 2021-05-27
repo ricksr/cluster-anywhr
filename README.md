@@ -39,3 +39,6 @@ python , flask, JS , reactjs , aws lambda , serverless , graphql
 
 ## Result
 <img src='https://i.ibb.co/zNjW4pG/Screenshot-from-2020-09-22-14-40-32.png' />
+
+DB HIDDEN
+API WAIT FOR 🥶 TIME
