@@ -11,6 +11,9 @@ in cluster :
 3. you can delete a hex using its name  .
 4. you can only delete , if it's not a bridge and even if it connects to other clusters ( strongly connected components ) , there are other ways to reach that particular node from that other component .
 
+*Though the connections are not directed , each cluster is connected ( strongly is not the correct keyword :p )
+*https://www.redblobgames.com/grids/hexagons/
+
 used aws - lambdas for API's
 
 ## DB - idea :
